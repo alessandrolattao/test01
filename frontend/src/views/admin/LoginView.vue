@@ -55,8 +55,8 @@ const { mutateAsync, asyncStatus } = useAdminLogin()
 const loginError = ref(null)
 
 const form = reactive({
-  email: '',
-  password: '',
+  email: 'admin@test.com',
+  password: 'password',
 })
 
 async function handleLogin() {

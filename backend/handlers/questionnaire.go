@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math/rand"
 	"net/http"
 
 	"recruitment-platform/models"
@@ -67,6 +68,9 @@ func (h *QuestionnaireHandler) GetActive(c *gin.Context) {
 				SortOrder:  a.SortOrder,
 			})
 		}
+		rand.Shuffle(len(pq.Answers), func(i, j int) {
+			pq.Answers[i], pq.Answers[j] = pq.Answers[j], pq.Answers[i]
+		})
 		result.Questions = append(result.Questions, pq)
 	}
 

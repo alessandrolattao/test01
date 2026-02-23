@@ -13,6 +13,22 @@ services:
       timeout: 5s
       retries: 5
 
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    environment:
+      ASR_MODEL: small
+      ASR_ENGINE: faster_whisper
+    ports:
+      - "9000:9000"
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 5 && ollama pull qwen3:4b && wait"]
+
   backend:
     image: golang:1.26-alpine
     working_dir: /app
@@ -31,6 +47,9 @@ services:
       DB_PASSWORD: recruitment
       DB_NAME: recruitment
       JWT_SECRET: super-secret-dev-key-change-in-prod
+      WHISPER_URL: http://whisper:9000
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: qwen3:4b
 
   frontend:
     image: node:22-alpine
@@ -44,3 +63,4 @@ services:
 
 volumes:
   frontend_node_modules:
+  ollama_data:

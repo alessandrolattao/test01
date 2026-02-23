@@ -7,6 +7,7 @@ import (
 	"recruitment-platform/config"
 	"recruitment-platform/handlers"
 	"recruitment-platform/middleware"
+	"recruitment-platform/services"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -45,10 +46,19 @@ func main() {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
+	// AI Service
+	aiService := &services.AIService{
+		DB:          db,
+		WhisperURL:  cfg.WhisperURL,
+		OllamaURL:   cfg.OllamaURL,
+		OllamaModel: cfg.OllamaModel,
+	}
+	log.Printf("AI Service configured: Whisper=%s, Ollama=%s (model: %s)", cfg.WhisperURL, cfg.OllamaURL, cfg.OllamaModel)
+
 	// Handlers
-	candidateHandler := &handlers.CandidateHandler{DB: db}
+	candidateHandler := &handlers.CandidateHandler{DB: db, AIService: aiService}
 	questionnaireHandler := &handlers.QuestionnaireHandler{DB: db}
-	adminHandler := &handlers.AdminHandler{DB: db, JWTSecret: cfg.JWTSecret}
+	adminHandler := &handlers.AdminHandler{DB: db, JWTSecret: cfg.JWTSecret, AIService: aiService}
 
 	// Public routes
 	api := r.Group("/api")
@@ -69,6 +79,7 @@ func main() {
 		adminProtected.GET("/candidates", adminHandler.ListCandidates)
 		adminProtected.GET("/candidates/:id", adminHandler.GetCandidate)
 		adminProtected.GET("/candidates/:id/audio", adminHandler.GetCandidateAudio)
+		adminProtected.POST("/candidates/:id/reanalyze", adminHandler.ReanalyzeCandidate)
 		adminProtected.GET("/questionnaires", adminHandler.ListQuestionnaires)
 		adminProtected.GET("/questionnaires/:id", adminHandler.GetQuestionnaire)
 		adminProtected.POST("/questionnaires", adminHandler.CreateQuestionnaire)

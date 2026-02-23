@@ -44,6 +44,10 @@ CREATE TABLE candidates (
     total_score      INT DEFAULT 0,
     audio_path       VARCHAR(500),
     completed        BOOLEAN DEFAULT FALSE,
+    transcript       TEXT,
+    ai_analysis      TEXT,
+    ai_score         INT,
+    analysis_status  VARCHAR(20) DEFAULT 'pending',
     created_at       TIMESTAMP DEFAULT NOW()
 );
 

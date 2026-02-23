@@ -7,6 +7,7 @@ import (
 
 	"recruitment-platform/middleware"
 	"recruitment-platform/models"
+	"recruitment-platform/services"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -16,6 +17,7 @@ import (
 type AdminHandler struct {
 	DB        *gorm.DB
 	JWTSecret string
+	AIService *services.AIService
 }
 
 type loginRequest struct {
@@ -123,6 +125,10 @@ func (h *AdminHandler) GetCandidate(c *gin.Context) {
 		"completed":        candidate.Completed,
 		"created_at":       candidate.CreatedAt,
 		"answers":          answers,
+		"transcript":       candidate.Transcript,
+		"ai_analysis":      candidate.AIAnalysis,
+		"ai_score":         candidate.AIScore,
+		"analysis_status":  candidate.AnalysisStatus,
 	})
 }
 
@@ -257,4 +263,20 @@ func (h *AdminHandler) CreateQuestionnaire(c *gin.Context) {
 		First(&questionnaire, "id = ?", questionnaire.ID)
 
 	c.JSON(http.StatusCreated, questionnaire)
+}
+
+func (h *AdminHandler) ReanalyzeCandidate(c *gin.Context) {
+	id := c.Param("id")
+
+	if h.AIService == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "AI service not configured"})
+		return
+	}
+
+	if err := h.AIService.ReanalyzeCandidate(id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "reanalysis started"})
 }

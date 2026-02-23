@@ -47,6 +47,16 @@ export function useCreateQuestionnaire() {
   })
 }
 
+export function useReanalyzeCandidate() {
+  const queryCache = useQueryCache()
+  return useMutation({
+    mutation: (candidateId) => post(`/admin/candidates/${candidateId}/reanalyze`),
+    onSettled() {
+      queryCache.invalidateQueries({ key: ['admin', 'candidates'] })
+    },
+  })
+}
+
 export function candidateAudioUrl(candidateId) {
   return `/api/admin/candidates/${candidateId}/audio`
 }

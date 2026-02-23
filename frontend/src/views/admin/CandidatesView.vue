@@ -46,6 +46,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Score</th>
+            <th>AI Score</th>
             <th>Audio</th>
             <th>Date</th>
             <th>Actions</th>
@@ -58,6 +59,15 @@
             <td class="text-sm">{{ candidate.email }}</td>
             <td>
               <ScoreBadge :score="candidate.total_score > 0 ? candidate.total_score : null" :max-score="maxScore" />
+            </td>
+            <td>
+              <span v-if="candidate.ai_score != null" class="badge badge-sm" :class="aiScoreBadge(candidate.ai_score)">
+                {{ candidate.ai_score }}
+              </span>
+              <span v-else-if="candidate.analysis_status === 'transcribing' || candidate.analysis_status === 'analyzing'" class="loading loading-dots loading-xs"></span>
+              <span v-else-if="candidate.analysis_status === 'failed'" class="badge badge-sm badge-error">Failed</span>
+              <span v-else-if="!candidate.completed" class="badge badge-sm badge-ghost">Incomplete</span>
+              <span v-else class="text-sm text-base-content/30">-</span>
             </td>
             <td>
               <AudioPlayer
@@ -110,6 +120,12 @@ const completedCount = computed(() => {
   if (!data.value) return 0
   return data.value.filter((c) => c.completed).length
 })
+
+function aiScoreBadge(score) {
+  if (score >= 70) return 'badge-success'
+  if (score >= 40) return 'badge-warning'
+  return 'badge-error'
+}
 
 function formatDate(dateStr) {
   if (!dateStr) return ''

@@ -11,6 +11,10 @@ type Candidate struct {
 	TotalScore       int               `gorm:"default:0" json:"total_score"`
 	AudioPath        *string           `gorm:"type:varchar(500)" json:"audio_path,omitempty"`
 	Completed        bool              `gorm:"default:false" json:"completed"`
+	Transcript       *string           `gorm:"type:text" json:"transcript,omitempty"`
+	AIAnalysis       *string           `gorm:"type:text;column:ai_analysis" json:"ai_analysis,omitempty"`
+	AIScore          *int              `gorm:"column:ai_score" json:"ai_score,omitempty"`
+	AnalysisStatus   string            `gorm:"type:varchar(20);default:pending" json:"analysis_status"`
 	CreatedAt        time.Time         `json:"created_at"`
 	CandidateAnswers []CandidateAnswer `gorm:"foreignKey:CandidateID" json:"candidate_answers,omitempty"`
 }

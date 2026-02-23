@@ -7,13 +7,15 @@ import (
 	"path/filepath"
 
 	"recruitment-platform/models"
+	"recruitment-platform/services"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type CandidateHandler struct {
-	DB *gorm.DB
+	DB        *gorm.DB
+	AIService *services.AIService
 }
 
 type registerRequest struct {
@@ -154,6 +156,11 @@ func (h *CandidateHandler) UploadAudio(c *gin.Context) {
 		"audio_path": savePath,
 		"completed":  true,
 	})
+
+	// Trigger AI transcription + analysis pipeline
+	if h.AIService != nil {
+		h.AIService.TranscribeAndAnalyze(id, savePath)
+	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "audio uploaded successfully"})
 }

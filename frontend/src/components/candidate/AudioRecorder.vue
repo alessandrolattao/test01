@@ -2,10 +2,11 @@
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body items-center text-center">
       <h2 class="card-title text-2xl mb-2">Audio Presentation</h2>
-      <p class="text-base-content/70 mb-6 max-w-md">
-        Record a brief presentation about yourself.
-        You have up to 2 minutes. Click the button below to start.
-      </p>
+      <div class="text-base-content/70 mb-6 max-w-md text-left space-y-2">
+        <p>Presentati brevemente e raccontaci di un <strong>luogo turistico</strong> che hai visitato: un'attrazione, un ristorante, un hotel o qualsiasi esperienza di viaggio.</p>
+        <p>Descrivi il posto come se stessi scrivendo una recensione: cosa ti ha colpito, i punti di forza, cosa miglioreresti e se lo consiglieresti.</p>
+        <p class="text-sm text-base-content/50">Hai a disposizione massimo 2 minuti.</p>
+      </div>
 
       <!-- Error -->
       <div v-if="recorder.error.value" class="alert alert-warning mb-4">

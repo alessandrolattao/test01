@@ -16,11 +16,11 @@
 
       <!-- Quiz content -->
       <template v-else-if="data">
-        <!-- Progress -->
+        <!-- Progress bar -->
         <div class="mb-6">
           <div class="flex justify-between text-sm mb-1">
-            <span>Progress</span>
-            <span>{{ answeredCount }} of {{ data.questions.length }} answered</span>
+            <span>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</span>
+            <span>{{ answeredCount }} answered</span>
           </div>
           <progress
             class="progress progress-primary w-full"
@@ -29,15 +29,13 @@
           ></progress>
         </div>
 
-        <!-- Questions -->
+        <!-- Single question -->
         <QuestionCard
-          v-for="(question, i) in data.questions"
-          :key="question.id"
-          :question="question"
-          :index="i"
-          :model-value="selectedAnswers[question.id] || null"
+          :question="currentQuestion"
+          :index="currentIndex"
+          :model-value="selectedAnswers[currentQuestion.id] || null"
           :disabled="submitStatus === 'loading'"
-          @update:model-value="(val) => (selectedAnswers[question.id] = val)"
+          @update:model-value="handleAnswer"
         />
 
         <!-- Submit error -->
@@ -45,19 +43,34 @@
           <span>{{ submitError }}</span>
         </div>
 
-        <!-- Submit -->
-        <div class="mt-6 mb-8">
+        <!-- Navigation -->
+        <div class="flex gap-3 mt-6 mb-8">
           <button
-            class="btn btn-primary btn-block btn-lg"
-            :disabled="submitStatus === 'loading'"
+            v-if="currentIndex > 0"
+            class="btn btn-outline flex-1"
+            @click="currentIndex--"
+          >
+            Previous
+          </button>
+          <div v-else class="flex-1"></div>
+
+          <button
+            v-if="!isLastQuestion"
+            class="btn btn-primary flex-1"
+            :disabled="!currentAnswered"
+            @click="currentIndex++"
+          >
+            Next
+          </button>
+          <button
+            v-else
+            class="btn btn-primary flex-1"
+            :disabled="!allAnswered || submitStatus === 'loading'"
             @click="handleSubmit"
           >
             <span v-if="submitStatus === 'loading'" class="loading loading-spinner loading-sm"></span>
             Submit Answers
           </button>
-          <p v-if="!allAnswered" class="text-center text-sm text-base-content/50 mt-2">
-            Answer all questions to continue
-          </p>
         </div>
       </template>
     </div>
@@ -80,6 +93,15 @@ const { mutateAsync: submitAnswers, asyncStatus: submitStatus } = useSubmitAnswe
 
 const selectedAnswers = reactive({})
 const submitError = ref(null)
+const currentIndex = ref(0)
+
+const totalQuestions = computed(() => data.value?.questions.length || 0)
+
+const currentQuestion = computed(() => data.value?.questions[currentIndex.value])
+
+const isLastQuestion = computed(() => currentIndex.value === totalQuestions.value - 1)
+
+const currentAnswered = computed(() => !!selectedAnswers[currentQuestion.value?.id])
 
 const answeredCount = computed(() => {
   if (!data.value) return 0
@@ -88,13 +110,23 @@ const answeredCount = computed(() => {
 
 const allAnswered = computed(() => {
   if (!data.value) return false
-  return answeredCount.value === data.value.questions.length
+  return answeredCount.value === totalQuestions.value
 })
 
 const progressPct = computed(() => {
-  if (!data.value || data.value.questions.length === 0) return 0
-  return Math.round((answeredCount.value / data.value.questions.length) * 100)
+  if (totalQuestions.value === 0) return 0
+  return Math.round((answeredCount.value / totalQuestions.value) * 100)
 })
+
+function handleAnswer(answerId) {
+  selectedAnswers[currentQuestion.value.id] = answerId
+  // Auto-advance after a short delay
+  if (!isLastQuestion.value) {
+    setTimeout(() => {
+      currentIndex.value++
+    }, 300)
+  }
+}
 
 async function handleSubmit() {
   if (!allAnswered.value) return
