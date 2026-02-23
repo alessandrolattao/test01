@@ -1,26 +1,23 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
+	"time"
 
+	"recruitment-platform/config"
+	"recruitment-platform/handlers"
+	"recruitment-platform/middleware"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		getEnv("DB_HOST", "localhost"),
-		getEnv("DB_PORT", "5432"),
-		getEnv("DB_USER", "recruitment"),
-		getEnv("DB_PASSWORD", "recruitment"),
-		getEnv("DB_NAME", "recruitment"),
-	)
+	cfg := config.Load()
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(cfg.DSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -33,22 +30,52 @@ func main() {
 
 	r := gin.Default()
 
+	// CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	// Health check
 	r.GET("/api/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 
-	// TODO: register route groups here
-	_ = db
+	// Handlers
+	candidateHandler := &handlers.CandidateHandler{DB: db}
+	questionnaireHandler := &handlers.QuestionnaireHandler{DB: db}
+	adminHandler := &handlers.AdminHandler{DB: db, JWTSecret: cfg.JWTSecret}
+
+	// Public routes
+	api := r.Group("/api")
+	{
+		api.POST("/candidates", candidateHandler.Register)
+		api.GET("/questionnaire", questionnaireHandler.GetActive)
+		api.POST("/candidates/:id/answers", candidateHandler.SubmitAnswers)
+		api.POST("/candidates/:id/audio", candidateHandler.UploadAudio)
+	}
+
+	// Admin routes (JWT protected)
+	admin := api.Group("/admin")
+	admin.POST("/login", adminHandler.Login)
+
+	adminProtected := admin.Group("")
+	adminProtected.Use(middleware.JWTAuth(cfg.JWTSecret))
+	{
+		adminProtected.GET("/candidates", adminHandler.ListCandidates)
+		adminProtected.GET("/candidates/:id", adminHandler.GetCandidate)
+		adminProtected.GET("/candidates/:id/audio", adminHandler.GetCandidateAudio)
+		adminProtected.GET("/questionnaires", adminHandler.ListQuestionnaires)
+		adminProtected.GET("/questionnaires/:id", adminHandler.GetQuestionnaire)
+		adminProtected.POST("/questionnaires", adminHandler.CreateQuestionnaire)
+	}
 
 	log.Println("Starting server on :8080")
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
-}
-
-func getEnv(key, fallback string) string {
-	if val := os.Getenv(key); val != "" {
-		return val
-	}
-	return fallback
 }
