@@ -5,7 +5,7 @@
 INSERT INTO admins (id, email, password_hash) VALUES (
     'a0000000-0000-0000-0000-000000000001',
     'admin@test.com',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
+    '$2b$10$suJ3c8ZWOJq/xwcTWa7QquJGSgAnE54D8pNQx/if60kjDBKo9cZPi'
 );
 
 -- Tourism Reviewer Selector Questionnaire v1

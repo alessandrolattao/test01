@@ -77,9 +77,8 @@
                   >
                     {{ answerIcon(answer, qa.selected_answer_id) }}
                   </span>
-                  <span :class="{ 'opacity-50': answer.id !== qa.selected_answer_id && answer.score === 0 }">
+                  <span :class="{ 'font-medium': answer.id === qa.selected_answer_id }">
                     {{ answer.text }}
-                    <template v-if="answer.id === qa.selected_answer_id"> (selected)</template>
                   </span>
                   <span class="badge badge-ghost badge-sm ml-auto">{{ answer.score }} pts</span>
                 </div>
@@ -118,23 +117,17 @@ const scoreColor = computed(() => {
 })
 
 function answerRowClass(answer, selectedId) {
-  if (answer.id === selectedId && answer.score > 0) return 'bg-success/10'
-  if (answer.id === selectedId && answer.score === 0) return 'bg-error/10'
-  if (answer.id !== selectedId && answer.score > 0) return 'bg-success/10'
+  if (answer.id === selectedId) return 'bg-primary/10'
   return ''
 }
 
 function answerBadgeClass(answer, selectedId) {
-  if (answer.id === selectedId && answer.score > 0) return 'badge-success'
-  if (answer.id === selectedId && answer.score === 0) return 'badge-error'
-  if (answer.id !== selectedId && answer.score > 0) return 'badge-success'
+  if (answer.id === selectedId) return 'badge-primary'
   return 'badge-ghost'
 }
 
 function answerIcon(answer, selectedId) {
-  if (answer.id === selectedId && answer.score > 0) return '\u2713'
-  if (answer.id === selectedId && answer.score === 0) return '\u2717'
-  if (answer.id !== selectedId && answer.score > 0) return '\u2713'
+  if (answer.id === selectedId) return '\u2713'
   return '\u00A0'
 }
 

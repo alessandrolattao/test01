@@ -7,9 +7,6 @@ services:
       POSTGRES_DB: recruitment
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U recruitment"]
       interval: 5s
@@ -17,7 +14,7 @@ services:
       retries: 5
 
   backend:
-    image: golang:1.23
+    image: golang:1.26-alpine
     working_dir: /app
     command: sh -c "go install github.com/air-verse/air@latest && air"
     volumes:
@@ -36,7 +33,7 @@ services:
       JWT_SECRET: super-secret-dev-key-change-in-prod
 
   frontend:
-    image: node:22
+    image: node:22-alpine
     working_dir: /app
     command: sh -c "npm install && npm run dev"
     volumes:
@@ -46,5 +43,4 @@ services:
       - "5173:5173"
 
 volumes:
-  pgdata:
   frontend_node_modules:

@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"net/http"
+	"os"
+	"sort"
 
 	"recruitment-platform/middleware"
 	"recruitment-platform/models"
@@ -62,15 +64,66 @@ func (h *AdminHandler) GetCandidate(c *gin.Context) {
 
 	var candidate models.Candidate
 	err := h.DB.
+		Preload("CandidateAnswers").
 		Preload("CandidateAnswers.Question").
-		Preload("CandidateAnswers.Answer").
+		Preload("CandidateAnswers.Question.Answers", func(db *gorm.DB) *gorm.DB {
+			return db.Order("sort_order ASC")
+		}).
 		First(&candidate, "id = ?", id).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "candidate not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, candidate)
+	// Sort by question order
+	sort.Slice(candidate.CandidateAnswers, func(i, j int) bool {
+		return candidate.CandidateAnswers[i].Question.SortOrder < candidate.CandidateAnswers[j].Question.SortOrder
+	})
+
+	// Build answers in the format frontend expects
+	type answerInfo struct {
+		ID    string `json:"id"`
+		Text  string `json:"text"`
+		Score int    `json:"score"`
+	}
+	type questionAnswer struct {
+		QuestionID       string       `json:"question_id"`
+		QuestionText     string       `json:"question_text"`
+		SelectedAnswerID string       `json:"selected_answer_id"`
+		Score            int          `json:"score"`
+		AllAnswers       []answerInfo `json:"all_answers"`
+	}
+
+	var answers []questionAnswer
+	for _, ca := range candidate.CandidateAnswers {
+		qa := questionAnswer{
+			QuestionID:       ca.QuestionID,
+			QuestionText:     ca.Question.Text,
+			SelectedAnswerID: ca.AnswerID,
+			Score:            ca.Score,
+		}
+		for _, a := range ca.Question.Answers {
+			qa.AllAnswers = append(qa.AllAnswers, answerInfo{
+				ID:    a.ID,
+				Text:  a.Text,
+				Score: a.Score,
+			})
+		}
+		answers = append(answers, qa)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"id":               candidate.ID,
+		"first_name":       candidate.FirstName,
+		"last_name":        candidate.LastName,
+		"email":            candidate.Email,
+		"questionnaire_id": candidate.QuestionnaireID,
+		"total_score":      candidate.TotalScore,
+		"audio_path":       candidate.AudioPath,
+		"completed":        candidate.Completed,
+		"created_at":       candidate.CreatedAt,
+		"answers":          answers,
+	})
 }
 
 func (h *AdminHandler) GetCandidateAudio(c *gin.Context) {
@@ -87,7 +140,12 @@ func (h *AdminHandler) GetCandidateAudio(c *gin.Context) {
 		return
 	}
 
-	c.File(*candidate.AudioPath)
+	data, err := os.ReadFile(*candidate.AudioPath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read audio file"})
+		return
+	}
+	c.Data(http.StatusOK, "audio/webm", data)
 }
 
 func (h *AdminHandler) ListQuestionnaires(c *gin.Context) {

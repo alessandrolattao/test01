@@ -57,7 +57,7 @@
             <td class="font-medium">{{ candidate.first_name }} {{ candidate.last_name }}</td>
             <td class="text-sm">{{ candidate.email }}</td>
             <td>
-              <ScoreBadge :score="candidate.completed ? candidate.total_score : null" :max-score="maxScore" />
+              <ScoreBadge :score="candidate.total_score > 0 ? candidate.total_score : null" :max-score="maxScore" />
             </td>
             <td>
               <AudioPlayer
