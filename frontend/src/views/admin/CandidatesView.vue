@@ -61,9 +61,7 @@
               <ScoreBadge :score="candidate.total_score > 0 ? candidate.total_score : null" :max-score="maxScore" />
             </td>
             <td>
-              <span v-if="candidate.ai_score != null" class="badge badge-sm" :class="aiScoreBadge(candidate.ai_score)">
-                {{ candidate.ai_score }}
-              </span>
+              <ScoreBadge v-if="candidate.ai_score != null" :score="candidate.ai_score" :max-score="100" />
               <span v-else-if="candidate.analysis_status === 'transcribing' || candidate.analysis_status === 'analyzing'" class="loading loading-dots loading-xs"></span>
               <span v-else-if="candidate.analysis_status === 'failed'" class="badge badge-sm badge-error">Failed</span>
               <span v-else-if="!candidate.completed" class="badge badge-sm badge-ghost">Incomplete</span>
@@ -93,7 +91,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import AdminLayout from '../../components/admin/AdminLayout.vue'
 import AudioPlayer from '../../components/admin/AudioPlayer.vue'
@@ -101,6 +99,20 @@ import ScoreBadge from '../../components/admin/ScoreBadge.vue'
 import { useCandidatesList, candidateAudioUrl } from '../../composables/useAdmin.js'
 
 const { data, isPending, error, refresh } = useCandidatesList()
+
+// Polling: refresh every 10s to catch new candidates and analysis updates
+let pollInterval = null
+
+onMounted(() => {
+  pollInterval = setInterval(() => refresh(), 10000)
+})
+
+onUnmounted(() => {
+  if (pollInterval) {
+    clearInterval(pollInterval)
+    pollInterval = null
+  }
+})
 
 const maxScore = computed(() => {
   if (!data.value || data.value.length === 0) return 100

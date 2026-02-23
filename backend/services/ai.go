@@ -126,7 +126,7 @@ func (s *AIService) transcribe(audioPath string) (string, error) {
 	}
 	_ = writer.Close()
 
-	url := s.WhisperURL + "/asr?language=it&output=json"
+	url := s.WhisperURL + "/asr?output=json"
 	req, err := http.NewRequest("POST", url, &buf)
 	if err != nil {
 		return "", fmt.Errorf("creating request: %w", err)
