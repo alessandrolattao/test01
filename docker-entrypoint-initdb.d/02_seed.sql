@@ -8,8 +8,11 @@ INSERT INTO admins (id, email, password_hash) VALUES (
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'
 );
 
--- Psychological Profile Questionnaire (Big Five / OCEAN)
+-- Tourism Reviewer Selector Questionnaire v1
 -- 10 situational questions, 2 per dimension, max score 100
+-- Dimensions: Attenzione al Dettaglio, Comunicazione Efficace,
+--             Obiettivita e Imparzialita, Autonomia e Organizzazione,
+--             Sensibilita Culturale
 INSERT INTO questionnaires (id, version, is_active) VALUES (
     gen_random_uuid(), 1, TRUE
 );
@@ -24,153 +27,153 @@ BEGIN
     SELECT id INTO qid FROM questionnaires WHERE is_active = TRUE LIMIT 1;
 
     -- =============================================
-    -- OPENNESS (questions 1-2)
+    -- ATTENZIONE AL DETTAGLIO (questions 1-2)
     -- =============================================
 
-    -- Q1: Openness - Reaction to new technologies
+    -- Q1: Attention to Detail - Restaurant review completeness
     q1 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q1, qid,
-        'Il tuo team deve affrontare un progetto completamente nuovo, con tecnologie e metodi che nessuno ha mai usato prima. Come reagisci?',
+        'Stai visitando un ristorante per recensirlo. Il cibo e'' buono ma noti che il bagno non e'' pulitissimo e l''illuminazione del locale e'' troppo forte. Nella tua recensione, come tratti questi aspetti?',
         1
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q1, 'Sono entusiasta: mi offro volontario per esplorare le nuove tecnologie e propongo un piano di studio condiviso', 10, 1),
-        (q1, 'Sono curioso ma cauto: inizio a documentarmi per conto mio prima di espormi con il team', 7, 2),
-        (q1, 'Preferisco che qualcun altro faccia da apripista, poi mi adeguo una volta che il percorso e'' chiaro', 4, 3),
-        (q1, 'Propongo di usare metodi gia'' collaudati e adattarli al nuovo progetto, evitando rischi inutili', 2, 4);
+        (q1, 'Li descrivo entrambi con precisione, spiegando come impattano l''esperienza complessiva del cliente, pur riconoscendo la qualita'' del cibo', 10, 1),
+        (q1, 'Menziono il bagno perche'' riguarda l''igiene, ma tralascio l''illuminazione che e'' una questione di gusto personale', 6, 2),
+        (q1, 'Mi concentro sul cibo che e'' l''aspetto principale: i dettagli secondari li segnalo solo se sono davvero gravi', 3, 3),
+        (q1, 'Non li riporto: se il cibo e'' buono, il resto e'' contorno e non voglio penalizzare il ristorante per dettagli minori', 1, 4);
 
-    -- Q2: Openness - Handling opposing ideas
+    -- Q2: Attention to Detail - Unlisted museum discovery
     q2 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q2, qid,
-        'Durante una riunione, un collega presenta un''idea che contraddice completamente la tua visione del progetto. Come ti comporti?',
+        'Stai censendo le attivita'' di un borgo turistico e noti che un piccolo museo non e'' presente su nessuna guida online. All''ingresso non ci sono orari visibili e il custode non e'' disponibile. Come procedi?',
         2
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q2, 'Ascolto con attenzione e chiedo di approfondire: potrebbe avere visto qualcosa che mi e'' sfuggito', 10, 1),
-        (q2, 'Prendo nota della sua idea e la confronto con la mia dopo la riunione, con calma', 7, 2),
-        (q2, 'Espongo subito i punti deboli della sua proposta per evitare che il team prenda una direzione sbagliata', 3, 3),
-        (q2, 'Lascio correre per non creare conflitto, ma resto convinto della mia idea originale', 1, 4);
+        (q2, 'Fotografo l''esterno, annoto l''indirizzo esatto, cerco un contatto telefonico sui cartelli, chiedo informazioni ai commercianti vicini e torno in un altro momento per completare la scheda', 10, 1),
+        (q2, 'Segno il nome e l''indirizzo, scatto una foto e lo inserisco nella lista come attivita'' da verificare in seguito', 7, 2),
+        (q2, 'Lo inserisco nella lista con le informazioni che riesco a trovare online, senza tornare di persona', 4, 3),
+        (q2, 'Se non c''e'' online e non riesco a entrare, probabilmente non e'' un''attivita'' rilevante per i turisti: passo oltre', 1, 4);
 
     -- =============================================
-    -- CONSCIENTIOUSNESS (questions 3-4)
+    -- COMUNICAZIONE EFFICACE (questions 3-4)
     -- =============================================
 
-    -- Q3: Conscientiousness - Deadline management
+    -- Q3: Effective Communication - Wine tasting review
     q3 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q3, qid,
-        'Hai tre task da completare entro venerdi''. Il martedi'' ti accorgi che uno dei tre richiede piu'' tempo del previsto. Cosa fai?',
+        'Devi descrivere un''esperienza di degustazione di vini locali. L''evento era piacevole ma non eccezionale. Come imposti la recensione?',
         3
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q3, 'Ricalcolo le priorita'', comunico il ritardo al responsabile e propongo un piano aggiornato con le nuove tempistiche', 10, 1),
-        (q3, 'Mi organizzo per fare straordinario e cerco di consegnare tutto nei tempi, anche a costo di sacrificare qualcosa nella qualita''', 6, 2),
-        (q3, 'Mi concentro sul task problematico e spero di riuscire a recuperare sugli altri nei giorni restanti', 4, 3),
-        (q3, 'Aspetto di vedere come evolve la situazione: magari il task si risolve piu'' in fretta di quanto penso', 1, 4);
+        (q3, 'Racconto l''esperienza in modo coinvolgente partendo dall''atmosfera, descrivo i vini con dettagli sensoriali accessibili anche ai non esperti, e chiudo con un giudizio onesto su per chi e'' consigliata', 10, 1),
+        (q3, 'Descrivo i vini provati, il prezzo e la durata dell''esperienza, aggiungendo le mie impressioni personali in modo chiaro e diretto', 7, 2),
+        (q3, 'Scrivo una recensione tecnica dettagliata sui vini, con note sui vitigni e le tecniche di produzione, per dare informazioni precise', 4, 3),
+        (q3, 'Scrivo che e'' stata un''esperienza carina ma niente di speciale, con un voto medio e qualche riga di commento', 2, 4);
 
-    -- Q4: Conscientiousness - Error handling integrity
+    -- Q4: Effective Communication - Luxury hotel review
     q4 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q4, qid,
-        'Stai lavorando a un report importante. A meta'' del lavoro ti rendi conto che hai commesso un errore nei dati iniziali che nessuno noterebbe. Come ti comporti?',
+        'Ti chiedono di recensire un hotel di lusso. Non hai mai soggiornato in strutture di questa categoria. Come affronti la scrittura?',
         4
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q4, 'Mi fermo, correggo l''errore dall''inizio e ricalcolo tutto, anche se significa perdere mezza giornata di lavoro', 10, 1),
-        (q4, 'Correggo i dati da quel punto in poi e aggiungo una nota interna che spiega la correzione', 7, 2),
-        (q4, 'Valuto l''impatto dell''errore: se e'' minimo, vado avanti e lo segnalo dopo la consegna', 4, 3),
-        (q4, 'Se nessuno lo noterebbe, non vale la pena perdere tempo: consegno nei tempi e passo oltre', 1, 4);
+        (q4, 'Studio le recensioni di riferimento per capire i parametri del segmento lusso, vivo l''esperienza con attenzione a ogni aspetto e scrivo la recensione bilanciando descrizione oggettiva e impressioni da ospite, specificando il mio punto di vista', 10, 1),
+        (q4, 'Mi informo sui servizi standard delle strutture di lusso per avere un metro di paragone e scrivo la recensione confrontando quello che trovo con quello che ci si aspetta', 7, 2),
+        (q4, 'Scrivo quello che vedo e che provo: la mia inesperienza nel lusso puo'' essere un vantaggio perche'' rappresento il turista medio', 5, 3),
+        (q4, 'Chiedo a un collega piu'' esperto di strutture di lusso di aiutarmi con la recensione o di farsene carico', 2, 4);
 
     -- =============================================
-    -- EXTRAVERSION (questions 5-6)
+    -- OBIETTIVITA E IMPARZIALITA (questions 5-6)
     -- =============================================
 
-    -- Q5: Extraversion - Networking event
+    -- Q5: Objectivity - Free meal offer
     q5 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q5, qid,
-        'L''azienda organizza un evento di networking con professionisti del tuo settore che non conosci. Come affronti la serata?',
+        'Il proprietario di un agriturismo che stai recensendo ti offre un pranzo gratuito e una bottiglia di vino locale in regalo. Come ti comporti?',
         5
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q5, 'Mi presento a piu'' persone possibile, cerco punti in comune e scambio contatti durante tutta la serata', 10, 1),
-        (q5, 'Mi inserisco nei gruppi di conversazione gia'' formati e contribuisco quando ho qualcosa di interessante da dire', 7, 2),
-        (q5, 'Cerco qualcuno che conosco gia'' e resto nella sua orbita, aprendomi gradualmente ad altri', 4, 3),
-        (q5, 'Partecipo ma resto in disparte, osservo e intervengo solo se qualcuno mi coinvolge direttamente', 2, 4);
+        (q5, 'Ringrazio cortesemente ma declino sia il pranzo che il regalo, spiegando che devo mantenere l''imparzialita'' della mia valutazione. Pago il mio pranzo regolarmente', 10, 1),
+        (q5, 'Accetto il pranzo perche'' fa parte dell''esperienza da valutare, ma rifiuto il vino in regalo. Nella recensione specifico che sono stato ospite', 7, 2),
+        (q5, 'Accetto con piacere entrambi: e'' un gesto di ospitalita'' tipico della cultura locale e sarebbe scortese rifiutare. Cerco comunque di essere obiettivo nella recensione', 3, 3),
+        (q5, 'Accetto tutto senza problemi: e'' normale che le attivita'' cerchino di fare bella figura con i recensori, tanto so essere obiettivo a prescindere', 1, 4);
 
-    -- Q6: Extraversion - Team strategy discussion
+    -- Q6: Objectivity - Bad experience vs positive reviews
     q6 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q6, qid,
-        'Il tuo team deve decidere la strategia per il prossimo trimestre. Il responsabile chiede opinioni a tutti. Qual e'' il tuo approccio?',
+        'Stai recensendo un ristorante e la tua esperienza e'' stata pessima: servizio lento, piatti tiepidi, conto sbagliato. Pero'' online ha centinaia di recensioni positive. Come scrivi la tua valutazione?',
         6
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q6, 'Prendo la parola tra i primi, espongo la mia visione e cerco di guidare la discussione verso una decisione condivisa', 10, 1),
-        (q6, 'Ascolto le prime proposte, poi intervengo con la mia opinione arricchita dai contributi degli altri', 8, 2),
-        (q6, 'Preparo i miei punti ma aspetto che il responsabile mi chieda direttamente cosa ne penso', 4, 3),
-        (q6, 'Preferisco mandare le mie idee via email dopo la riunione, quando ho avuto tempo di elaborarle meglio', 2, 4);
+        (q6, 'Descrivo la mia esperienza con fatti specifici (tempi di attesa, temperatura dei piatti, errore nel conto), riconosco che le recensioni generali sono positive e suggerisco che potrebbe trattarsi di una giornata sfortunata, senza pero'' alterare il mio giudizio', 10, 1),
+        (q6, 'Scrivo esattamente quello che ho vissuto senza farmi influenzare dalle altre recensioni: la mia esperienza e'' quella che conta per la mia valutazione', 7, 2),
+        (q6, 'Ammorbidisco un po'' il giudizio considerando le tante recensioni positive: forse ho beccato un giorno storto e non sarebbe giusto penalizzarlo troppo', 3, 3),
+        (q6, 'Con cosi'' tante recensioni positive, forse il problema sono le mie aspettative. Riscrivo la recensione dando piu'' peso agli aspetti positivi', 1, 4);
 
     -- =============================================
-    -- AGREEABLENESS (questions 7-8)
+    -- AUTONOMIA E ORGANIZZAZIONE (questions 7-8)
     -- =============================================
 
-    -- Q7: Agreeableness - Struggling colleague
+    -- Q7: Autonomy - Week planning for 15 activities
     q7 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q7, qid,
-        'Un collega con cui lavori a stretto contatto sta attraversando un periodo difficile e le sue prestazioni ne risentono, aumentando il tuo carico di lavoro. Come gestisci la situazione?',
+        'Hai una settimana per censire e recensire 15 attivita'' sparse in una zona collinare con trasporti pubblici limitati. Come organizzi il lavoro?',
         7
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q7, 'Mi offro di aiutarlo con i suoi task e gli chiedo se c''e'' qualcosa che posso fare per alleggerirgli il periodo', 10, 1),
-        (q7, 'Assorbo il carico extra senza dire nulla, ma cerco di capire discretamente come sta', 7, 2),
-        (q7, 'Gestisco il mio lavoro normalmente e segnalo al responsabile che c''e'' un problema di capacita'' nel team', 4, 3),
-        (q7, 'Gli faccio presente che il suo calo sta impattando il mio lavoro e gli chiedo di trovare una soluzione', 2, 4);
+        (q7, 'Mappo tutte le attivita'', le raggruppo per zona geografica, pianifico un percorso ottimale giorno per giorno verificando orari di apertura e accessibilita'', e tengo due slot liberi per imprevisti o attivita'' scoperte sul posto', 10, 1),
+        (q7, 'Organizzo il percorso per aree geografiche in modo da minimizzare gli spostamenti, verifico gli orari di apertura e prenoto dove necessario', 7, 2),
+        (q7, 'Faccio un piano generale dividendo le 15 attivita'' nei 7 giorni, ma preferisco adattarmi giorno per giorno in base a come procede il lavoro', 4, 3),
+        (q7, 'Inizio dalla prima attivita'' della lista e procedo in ordine: pianificare troppo in anticipo e'' inutile perche'' sul campo cambia sempre tutto', 1, 4);
 
-    -- Q8: Agreeableness - Team conflict mediation
+    -- Q8: Autonomy - Falling behind schedule
     q8 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q8, qid,
-        'Durante un progetto di gruppo, emerge un conflitto tra due colleghi che blocca l''avanzamento del lavoro. Tu non sei direttamente coinvolto. Cosa fai?',
+        'E'' il terzo giorno di lavoro sul territorio e ti rendi conto che il ritmo che hai tenuto finora non ti permettera'' di completare tutte le attivita'' assegnate entro la scadenza. Cosa fai?',
         8
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q8, 'Mi propongo come mediatore: parlo con entrambi separatamente per capire le posizioni e cerco un compromesso', 10, 1),
-        (q8, 'Suggerisco al team di fare una riunione dove ognuno espone il suo punto di vista, per trovare una soluzione insieme', 8, 2),
-        (q8, 'Lascio che risolvano tra loro: non e'' il mio conflitto e non voglio essere coinvolto', 3, 3),
-        (q8, 'Segnalo la situazione al responsabile perche'' intervenga prima che il progetto ne risenta troppo', 5, 4);
+        (q8, 'Ricalcolo il piano: identifico le attivita'' prioritarie, comunico subito al coordinatore il potenziale ritardo e propongo un piano B con una nuova timeline per quelle restanti', 10, 1),
+        (q8, 'Aumento il ritmo, accetto di fare recensioni piu'' sintetiche per le attivita'' meno importanti e cerco di portare a termine tutto nei tempi', 5, 2),
+        (q8, 'Comunico al coordinatore che non riusciro'' a finire tutto e chiedo come procedere, aspettando istruzioni', 4, 3),
+        (q8, 'Continuo con il mio ritmo e faccio quello che riesco: meglio poche recensioni fatte bene che tante fatte di corsa', 3, 4);
 
     -- =============================================
-    -- EMOTIONAL STABILITY (questions 9-10)
+    -- SENSIBILITA CULTURALE (questions 9-10)
     -- =============================================
 
-    -- Q9: Emotional Stability - Last-minute changes
+    -- Q9: Cultural Sensitivity - Temple visit
     q9 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q9, qid,
-        'Il giorno prima di una presentazione importante, scopri che il cliente ha cambiato completamente le richieste. Il tuo lavoro degli ultimi due giorni e'' da rifare. Qual e'' la tua prima reazione?',
+        'Stai visitando un tempio di una religione che non conosci bene. I visitatori locali seguono rituali specifici all''ingresso. Non sai se siano obbligatori anche per i turisti. Come ti comporti?',
         9
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q9, 'Faccio un respiro, valuto cosa posso recuperare dal lavoro gia'' fatto e mi organizzo per adattare la presentazione', 10, 1),
-        (q9, 'Sono frustrato ma mi metto subito al lavoro: lamentarmi non cambierebbe la situazione', 7, 2),
-        (q9, 'Mi sfogo con un collega per scaricare la tensione, poi mi rimetto al lavoro con piu'' calma', 5, 3),
-        (q9, 'Sento la pressione salire e faccio fatica a concentrarmi: il cambio dell''ultimo minuto mi manda in confusione', 2, 4);
+        (q9, 'Osservo con attenzione cosa fanno gli altri visitatori, chiedo a qualcuno del posto se ci sono regole da seguire e mi adeguo rispettosamente. Nella recensione includo indicazioni pratiche per i turisti sui comportamenti attesi', 10, 1),
+        (q9, 'Seguo quello che fanno gli altri per rispetto, anche senza capirne il significato. Nella recensione menziono i rituali e consiglio ai turisti di informarsi prima della visita', 7, 2),
+        (q9, 'Entro rispettosamente senza partecipare ai rituali: non essendo della loro religione, non voglio essere inappropriato nel praticare riti che non conosco', 4, 3),
+        (q9, 'Entro come visitatore normale: sono un turista, non un fedele. I rituali religiosi sono per chi pratica quella fede', 1, 4);
 
-    -- Q10: Emotional Stability - Negative feedback
+    -- Q10: Cultural Sensitivity - Adapted ethnic restaurant
     q10 := gen_random_uuid();
     INSERT INTO questions (id, questionnaire_id, text, sort_order) VALUES (
         q10, qid,
-        'Il tuo responsabile ti da'' un feedback negativo su un progetto in cui avevi investito molto impegno. Come reagisci nelle ore successive?',
+        'Stai recensendo un ristorante etnico in una zona turistica. I piatti sono stati adattati al gusto locale e sono diversi dalla versione originale della cucina. Come valuti questo aspetto nella recensione?',
         10
     );
     INSERT INTO answers (question_id, text, score, sort_order) VALUES
-        (q10, 'Analizzo il feedback punto per punto, identifico cosa migliorare e preparo un piano d''azione per il prossimo progetto', 10, 1),
-        (q10, 'Mi prendo un momento per digerire la delusione, poi rileggo il feedback con occhi piu'' oggettivi', 7, 2),
-        (q10, 'Ci rimango male e ci penso per il resto della giornata, ma so che passera''', 4, 3),
-        (q10, 'Metto in discussione le mie capacita'': forse questo lavoro non fa per me', 1, 4);
+        (q10, 'Descrivo i piatti per quello che sono, segnalo le differenze rispetto alla tradizione originale in modo informativo (non giudicante), e valuto la qualita'' dell''esecuzione indipendentemente dall''autenticita''', 10, 1),
+        (q10, 'Valuto i piatti in base alla qualita'' complessiva e al rapporto qualita''-prezzo. Menziono che la cucina e'' adattata al gusto locale, lasciando al lettore il giudizio', 7, 2),
+        (q10, 'Segnalo chiaramente che non si tratta di cucina autentica: i turisti devono sapere che i piatti sono stati modificati rispetto all''originale', 4, 3),
+        (q10, 'Penalizzo il ristorante nella valutazione: se proponi una cucina etnica, deve essere autentica, altrimenti e'' una mancanza di rispetto per la cultura originale', 1, 4);
 
 END $$;
