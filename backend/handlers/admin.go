@@ -156,11 +156,30 @@ func (h *AdminHandler) GetCandidateAudio(c *gin.Context) {
 
 func (h *AdminHandler) ListQuestionnaires(c *gin.Context) {
 	var questionnaires []models.Questionnaire
-	if err := h.DB.Order("version DESC").Find(&questionnaires).Error; err != nil {
+	if err := h.DB.Preload("Questions").Order("version DESC").Find(&questionnaires).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch questionnaires"})
 		return
 	}
-	c.JSON(http.StatusOK, questionnaires)
+
+	type questionnaireItem struct {
+		ID             string `json:"id"`
+		Version        int    `json:"version"`
+		IsActive       bool   `json:"is_active"`
+		CreatedAt      string `json:"created_at"`
+		QuestionsCount int    `json:"questions_count"`
+	}
+
+	var result []questionnaireItem
+	for _, q := range questionnaires {
+		result = append(result, questionnaireItem{
+			ID:             q.ID,
+			Version:        q.Version,
+			IsActive:       q.IsActive,
+			CreatedAt:      q.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			QuestionsCount: len(q.Questions),
+		})
+	}
+	c.JSON(http.StatusOK, result)
 }
 
 func (h *AdminHandler) GetQuestionnaire(c *gin.Context) {

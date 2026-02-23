@@ -141,10 +141,14 @@ function aiScoreBadge(score) {
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+  }) + ' ' + d.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
   })
 }
 </script>
