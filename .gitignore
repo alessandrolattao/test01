@@ -16,3 +16,12 @@ backend/uploads/audio/*.webm
 
 # OS
 .DS_Store
+
+# Playwright MCP
+.playwright-mcp/
+
+# Planning docs
+docs/plans/
+
+# Misc
+*.png
