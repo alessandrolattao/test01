@@ -1,0 +1,24 @@
+{
+  "name": "recruitment-platform-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@pinia/colada": "^0.21.5",
+    "@tailwindcss/vite": "^4.2.1",
+    "daisyui": "^5.5.19",
+    "pinia": "^3.0.4",
+    "tailwindcss": "^4.2.1",
+    "vue": "^3.5.28",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.4",
+    "vite": "^7.3.1"
+  }
+}

@@ -1,0 +1,18 @@
+# Dependencies
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+
+# Backend binary
+backend/tmp/
+
+# Audio uploads (keep directory structure)
+backend/uploads/audio/*.webm
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

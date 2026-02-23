@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: recruitment
+      POSTGRES_PASSWORD: recruitment
+      POSTGRES_DB: recruitment
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recruitment"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: golang:1.23
+    working_dir: /app
+    command: sh -c "go install github.com/air-verse/air@latest && air"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: recruitment
+      DB_PASSWORD: recruitment
+      DB_NAME: recruitment
+      JWT_SECRET: super-secret-dev-key-change-in-prod
+
+  frontend:
+    image: node:22
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+
+volumes:
+  pgdata:
+  frontend_node_modules:
