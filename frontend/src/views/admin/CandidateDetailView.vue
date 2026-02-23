@@ -7,15 +7,15 @@
 
     <!-- Error -->
     <div v-else-if="error" class="alert alert-error">
-      <span>Failed to load candidate details.</span>
-      <button class="btn btn-sm btn-ghost" @click="refresh()">Retry</button>
+      <span>{{ $t('admin.candidateDetail.loadError') }}</span>
+      <button class="btn btn-sm btn-ghost" @click="refresh()">{{ $t('common.retry') }}</button>
     </div>
 
     <template v-else-if="data">
       <!-- Breadcrumb -->
       <div class="breadcrumbs text-sm mb-6">
         <ul>
-          <li><RouterLink to="/admin/candidates">Candidates</RouterLink></li>
+          <li><RouterLink to="/admin/candidates">{{ $t('admin.candidates.title') }}</RouterLink></li>
           <li>{{ data.first_name }} {{ data.last_name }}</li>
         </ul>
       </div>
@@ -27,10 +27,10 @@
             <div>
               <h2 class="card-title text-2xl">{{ data.first_name }} {{ data.last_name }}</h2>
               <p class="text-base-content/70">{{ data.email }}</p>
-              <p class="text-sm text-base-content/50 mt-1">Applied on {{ formatDate(data.created_at) }}</p>
+              <p class="text-sm text-base-content/50 mt-1">{{ $t('admin.candidateDetail.appliedOn', { date: formatDate(data.created_at) }) }}</p>
             </div>
             <div class="text-right">
-              <div class="text-sm text-base-content/50">Total Score</div>
+              <div class="text-sm text-base-content/50">{{ $t('admin.candidateDetail.totalScore') }}</div>
               <div class="text-4xl font-bold" :class="scoreColor">{{ data.total_score }}</div>
             </div>
           </div>
@@ -40,21 +40,21 @@
       <!-- Audio -->
       <div class="card bg-base-100 shadow-md mb-6">
         <div class="card-body">
-          <h3 class="card-title text-lg mb-3">Audio Presentation</h3>
+          <h3 class="card-title text-lg mb-3">{{ $t('admin.candidateDetail.audioTitle') }}</h3>
           <audio v-if="data.audio_path" :src="audioSrc" controls class="w-full"></audio>
-          <p v-else class="text-base-content/50">No audio recorded</p>
+          <p v-else class="text-base-content/50">{{ $t('admin.candidateDetail.noAudio') }}</p>
         </div>
       </div>
 
       <!-- Transcript -->
       <div v-if="data.audio_path" class="card bg-base-100 shadow-md mb-6">
         <div class="card-body">
-          <h3 class="card-title text-lg mb-3">Transcript</h3>
+          <h3 class="card-title text-lg mb-3">{{ $t('admin.candidateDetail.transcriptTitle') }}</h3>
 
           <!-- Loading state -->
           <div v-if="isTranscribing" class="flex items-center gap-3">
             <span class="loading loading-dots loading-md"></span>
-            <span class="text-base-content/70">Transcription in progress...</span>
+            <span class="text-base-content/70">{{ $t('admin.candidateDetail.transcribing') }}</span>
           </div>
 
           <!-- Transcript text -->
@@ -62,17 +62,17 @@
 
           <!-- Failed -->
           <div v-else-if="data.analysis_status === 'failed'" class="flex items-center justify-between">
-            <span class="text-error">Transcription failed</span>
+            <span class="text-error">{{ $t('admin.candidateDetail.transcriptFailed') }}</span>
             <button class="btn btn-sm btn-outline btn-error" :disabled="reanalyzeIsPending" @click="handleReanalyze">
               <span v-if="reanalyzeIsPending" class="loading loading-spinner loading-xs"></span>
-              Retry
+              {{ $t('common.retry') }}
             </button>
           </div>
 
           <!-- Pending -->
           <div v-else class="flex items-center gap-3">
             <span class="loading loading-dots loading-sm"></span>
-            <span class="text-base-content/50">Waiting to start...</span>
+            <span class="text-base-content/50">{{ $t('admin.candidateDetail.waitingStart') }}</span>
           </div>
         </div>
       </div>
@@ -81,9 +81,9 @@
       <div v-if="data.audio_path" class="card bg-base-100 shadow-md mb-6">
         <div class="card-body">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="card-title text-lg">AI Analysis</h3>
+            <h3 class="card-title text-lg">{{ $t('admin.candidateDetail.aiTitle') }}</h3>
             <div v-if="parsedAnalysis" class="flex items-center gap-2">
-              <span class="text-sm text-base-content/50">AI Score</span>
+              <span class="text-sm text-base-content/50">{{ $t('admin.candidateDetail.aiScore') }}</span>
               <div class="badge badge-lg font-bold" :class="aiScoreBadgeClass">
                 {{ data.ai_score }}/100
               </div>
@@ -93,14 +93,14 @@
           <!-- Loading state -->
           <div v-if="isAnalyzing" class="flex items-center gap-3">
             <span class="loading loading-dots loading-md"></span>
-            <span class="text-base-content/70">AI analysis in progress...</span>
+            <span class="text-base-content/70">{{ $t('admin.candidateDetail.aiAnalyzing') }}</span>
           </div>
 
           <!-- Analysis result -->
           <div v-else-if="parsedAnalysis" class="space-y-4">
             <!-- Summary -->
             <div>
-              <h4 class="font-semibold text-sm text-base-content/60 uppercase mb-1">Summary</h4>
+              <h4 class="font-semibold text-sm text-base-content/60 uppercase mb-1">{{ $t('admin.candidateDetail.summary') }}</h4>
               <p class="leading-relaxed">{{ parsedAnalysis.summary }}</p>
             </div>
 
@@ -124,7 +124,7 @@
 
             <!-- Strengths -->
             <div v-if="parsedAnalysis.strengths?.length">
-              <h4 class="font-semibold text-sm text-success uppercase mb-1">Strengths</h4>
+              <h4 class="font-semibold text-sm text-success uppercase mb-1">{{ $t('admin.candidateDetail.strengths') }}</h4>
               <ul class="list-disc list-inside space-y-1">
                 <li v-for="s in parsedAnalysis.strengths" :key="s">{{ s }}</li>
               </ul>
@@ -132,7 +132,7 @@
 
             <!-- Weaknesses -->
             <div v-if="parsedAnalysis.weaknesses?.length">
-              <h4 class="font-semibold text-sm text-error uppercase mb-1">Weaknesses</h4>
+              <h4 class="font-semibold text-sm text-error uppercase mb-1">{{ $t('admin.candidateDetail.weaknesses') }}</h4>
               <ul class="list-disc list-inside space-y-1">
                 <li v-for="w in parsedAnalysis.weaknesses" :key="w">{{ w }}</li>
               </ul>
@@ -140,24 +140,24 @@
 
             <!-- Recommendation -->
             <div v-if="parsedAnalysis.recommendation">
-              <h4 class="font-semibold text-sm text-info uppercase mb-1">Recommendation</h4>
+              <h4 class="font-semibold text-sm text-info uppercase mb-1">{{ $t('admin.candidateDetail.recommendation') }}</h4>
               <p class="leading-relaxed">{{ parsedAnalysis.recommendation }}</p>
             </div>
           </div>
 
           <!-- Failed -->
           <div v-else-if="data.analysis_status === 'failed'" class="flex items-center justify-between">
-            <span class="text-error">Analysis failed</span>
+            <span class="text-error">{{ $t('admin.candidateDetail.analysisFailed') }}</span>
             <button class="btn btn-sm btn-outline btn-error" :disabled="reanalyzeIsPending" @click="handleReanalyze">
               <span v-if="reanalyzeIsPending" class="loading loading-spinner loading-xs"></span>
-              Retry
+              {{ $t('common.retry') }}
             </button>
           </div>
 
           <!-- Pending / Transcribing -->
           <div v-else class="flex items-center gap-3">
             <span class="loading loading-dots loading-sm"></span>
-            <span class="text-base-content/50">Waiting for transcription to complete...</span>
+            <span class="text-base-content/50">{{ $t('admin.candidateDetail.waitingTranscript') }}</span>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@
       <!-- Answers -->
       <div v-if="data.answers && data.answers.length > 0" class="card bg-base-100 shadow-md">
         <div class="card-body">
-          <h3 class="card-title text-lg mb-4">Quiz Answers</h3>
+          <h3 class="card-title text-lg mb-4">{{ $t('admin.candidateDetail.quizAnswers') }}</h3>
 
           <div
             v-for="(qa, i) in data.answers"
@@ -196,7 +196,7 @@
                   <span class="flex-1 min-w-0" :class="{ 'font-medium': answer.id === qa.selected_answer_id }">
                     {{ answer.text }}
                   </span>
-                  <span class="badge badge-ghost badge-sm shrink-0">{{ answer.score }} pts</span>
+                  <span class="badge badge-ghost badge-sm shrink-0">{{ answer.score }} {{ $t('common.pts') }}</span>
                 </div>
               </div>
             </div>
@@ -210,9 +210,11 @@
 <script setup>
 import { computed, watch, onUnmounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import AdminLayout from '../../components/admin/AdminLayout.vue'
 import { useCandidateDetail, candidateAudioUrl, useReanalyzeCandidate } from '../../composables/useAdmin.js'
 
+const { t } = useI18n()
 const route = useRoute()
 const candidateId = computed(() => route.params.id)
 const { data, isPending, error, refresh } = useCandidateDetail(candidateId)
@@ -278,11 +280,11 @@ const scoreItems = computed(() => {
   if (!parsedAnalysis.value?.scores) return []
   const s = parsedAnalysis.value.scores
   return [
-    { key: 'descriptive_skills', label: 'Descriptive Skills', value: s.descriptive_skills || 0, max: 25 },
-    { key: 'critical_thinking', label: 'Critical Thinking', value: s.critical_thinking || 0, max: 25 },
-    { key: 'engagement', label: 'Engagement', value: s.engagement || 0, max: 20 },
-    { key: 'structure', label: 'Structure', value: s.structure || 0, max: 15 },
-    { key: 'practical_info', label: 'Practical Info', value: s.practical_info || 0, max: 15 },
+    { key: 'descriptive_skills', label: t('admin.candidateDetail.descriptiveSkills'), value: s.descriptive_skills || 0, max: 25 },
+    { key: 'critical_thinking', label: t('admin.candidateDetail.criticalThinking'), value: s.critical_thinking || 0, max: 25 },
+    { key: 'engagement', label: t('admin.candidateDetail.engagement'), value: s.engagement || 0, max: 20 },
+    { key: 'structure', label: t('admin.candidateDetail.structure'), value: s.structure || 0, max: 15 },
+    { key: 'practical_info', label: t('admin.candidateDetail.practicalInfo'), value: s.practical_info || 0, max: 15 },
   ]
 })
 
@@ -339,7 +341,7 @@ function answerIcon(answer, selectedId) {
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return new Date(dateStr).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

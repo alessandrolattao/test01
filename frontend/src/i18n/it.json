@@ -1,0 +1,147 @@
+{
+  "candidate": {
+    "steps": {
+      "registration": "Registrazione",
+      "quiz": "Quiz",
+      "audio": "Audio"
+    },
+    "home": {
+      "title": "Unisciti al Nostro Team",
+      "subtitle": "Inserisci i tuoi dati per iniziare",
+      "firstName": "Nome",
+      "lastName": "Cognome",
+      "email": "Email",
+      "firstNamePlaceholder": "Mario",
+      "lastNamePlaceholder": "Rossi",
+      "emailPlaceholder": "mario{'@'}example.com",
+      "submit": "Inizia il Quiz",
+      "error": "Registrazione fallita. Riprova."
+    },
+    "quiz": {
+      "loadError": "Impossibile caricare il quiz. Riprova.",
+      "questionOf": "Domanda {current} di {total}",
+      "answered": "{count} risposte date",
+      "previous": "Precedente",
+      "next": "Successiva",
+      "submit": "Invia Risposte",
+      "submitError": "Invio risposte fallito. Riprova."
+    },
+    "audio": {
+      "title": "Presentazione Audio",
+      "instruction1": "Presentati brevemente e raccontaci di un <strong>luogo turistico</strong> che hai visitato: un'attrazione, un ristorante, un hotel o qualsiasi esperienza di viaggio.",
+      "instruction2": "Descrivi il posto come se stessi scrivendo una recensione: cosa ti ha colpito, i punti di forza, cosa miglioreresti e se lo consiglieresti.",
+      "timeLimit": "Hai a disposizione massimo 2 minuti.",
+      "recording": "Registrazione in corso...",
+      "clickStart": "Clicca per iniziare la registrazione",
+      "clickStop": "Clicca per fermare la registrazione",
+      "recordAgain": "Registra di Nuovo",
+      "submitRecording": "Invia Registrazione",
+      "uploading": "Caricamento...",
+      "uploadError": "Caricamento audio fallito. Riprova."
+    },
+    "done": {
+      "title": "Grazie!",
+      "message": "La tua candidatura e' stata inviata con successo. Esamineremo il tuo profilo e ti ricontatteremo presto."
+    }
+  },
+  "admin": {
+    "login": {
+      "title": "Login Amministratore",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "admin{'@'}example.com",
+      "passwordPlaceholder": "********",
+      "submit": "Accedi",
+      "error": "Email o password non validi"
+    },
+    "layout": {
+      "title": "Gestione Recruiting",
+      "candidates": "Candidati",
+      "questionnaires": "Questionari",
+      "logout": "Esci"
+    },
+    "candidates": {
+      "title": "Candidati",
+      "total": "{count} totali",
+      "statTotal": "Candidati Totali",
+      "statAvg": "Punteggio Medio",
+      "statCompleted": "Completati",
+      "loadError": "Caricamento candidati fallito.",
+      "empty": "Nessun candidato",
+      "colName": "Nome",
+      "colEmail": "Email",
+      "colScore": "Punteggio",
+      "colAiScore": "Punteggio AI",
+      "colAudio": "Audio",
+      "colDate": "Data",
+      "colActions": "Azioni",
+      "failed": "Fallito",
+      "incomplete": "Incompleto",
+      "noAudio": "Nessun audio",
+      "view": "Dettagli"
+    },
+    "candidateDetail": {
+      "totalScore": "Punteggio Totale",
+      "appliedOn": "Candidatura del {date}",
+      "audioTitle": "Presentazione Audio",
+      "noAudio": "Nessun audio registrato",
+      "transcriptTitle": "Trascrizione",
+      "transcribing": "Trascrizione in corso...",
+      "transcriptFailed": "Trascrizione fallita",
+      "waitingStart": "In attesa di avvio...",
+      "aiTitle": "Analisi AI",
+      "aiScore": "Punteggio AI",
+      "aiAnalyzing": "Analisi AI in corso...",
+      "summary": "Riepilogo",
+      "strengths": "Punti di Forza",
+      "weaknesses": "Punti Deboli",
+      "recommendation": "Raccomandazione",
+      "analysisFailed": "Analisi fallita",
+      "waitingTranscript": "In attesa del completamento della trascrizione...",
+      "quizAnswers": "Risposte al Quiz",
+      "loadError": "Caricamento dettagli candidato fallito.",
+      "descriptiveSkills": "Capacita' Descrittive",
+      "criticalThinking": "Pensiero Critico",
+      "engagement": "Coinvolgimento",
+      "structure": "Struttura",
+      "practicalInfo": "Info Pratiche"
+    },
+    "questionnaires": {
+      "title": "Questionari",
+      "new": "Nuovo Questionario",
+      "loadError": "Caricamento questionari fallito.",
+      "empty": "Nessun questionario",
+      "createFirst": "Crea il Primo Questionario",
+      "version": "Versione {v}",
+      "active": "Attivo",
+      "inactive": "Inattivo",
+      "questionsCount": "{count} domande - Creato il {date}",
+      "view": "Dettagli",
+      "detailLoadError": "Caricamento dettagli questionario fallito.",
+      "createdOn": "Creato il {date} - {count} domande"
+    },
+    "questionnaireNew": {
+      "title": "Nuovo Questionario",
+      "question": "Domanda {n}",
+      "remove": "Rimuovi",
+      "questionText": "Testo Domanda",
+      "questionPlaceholder": "Inserisci la tua domanda...",
+      "answers": "Risposte",
+      "answerPlaceholder": "Testo risposta",
+      "scorePlaceholder": "Punti",
+      "addAnswer": "Aggiungi Risposta",
+      "addQuestion": "Aggiungi Domanda",
+      "cancel": "Annulla",
+      "save": "Salva Questionario",
+      "success": "Questionario creato con successo",
+      "errorTextRequired": "Il testo della domanda e' obbligatorio",
+      "errorAnswerText": "Tutte le risposte devono avere un testo",
+      "errorAnswerScore": "Almeno una risposta deve avere un punteggio maggiore di 0",
+      "saveError": "Creazione questionario fallita."
+    }
+  },
+  "common": {
+    "retry": "Riprova",
+    "pts": "pt"
+  }
+}

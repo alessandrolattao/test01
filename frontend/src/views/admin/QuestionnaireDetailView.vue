@@ -7,29 +7,28 @@
 
     <!-- Error -->
     <div v-else-if="error" class="alert alert-error">
-      <span>Failed to load questionnaire details.</span>
-      <button class="btn btn-sm btn-ghost" @click="refresh()">Retry</button>
+      <span>{{ $t('admin.questionnaires.detailLoadError') }}</span>
+      <button class="btn btn-sm btn-ghost" @click="refresh()">{{ $t('common.retry') }}</button>
     </div>
 
     <template v-else-if="data">
       <!-- Breadcrumb -->
       <div class="breadcrumbs text-sm mb-6">
         <ul>
-          <li><RouterLink to="/admin/questionnaires">Questionnaires</RouterLink></li>
-          <li>Version {{ data.version }}</li>
+          <li><RouterLink to="/admin/questionnaires">{{ $t('admin.questionnaires.title') }}</RouterLink></li>
+          <li>{{ $t('admin.questionnaires.version', { v: data.version }) }}</li>
         </ul>
       </div>
 
       <!-- Header -->
       <div class="flex items-center gap-3 mb-2">
-        <h1 class="text-2xl font-bold">Version {{ data.version }}</h1>
+        <h1 class="text-2xl font-bold">{{ $t('admin.questionnaires.version', { v: data.version }) }}</h1>
         <div class="badge badge-lg" :class="data.is_active ? 'badge-success' : 'badge-ghost'">
-          {{ data.is_active ? 'Active' : 'Inactive' }}
+          {{ data.is_active ? $t('admin.questionnaires.active') : $t('admin.questionnaires.inactive') }}
         </div>
       </div>
       <p class="text-base-content/50 mb-6">
-        Created on {{ formatDate(data.created_at) }}
-        - {{ data.questions?.length || 0 }} questions
+        {{ $t('admin.questionnaires.createdOn', { date: formatDate(data.created_at), count: data.questions?.length || 0 }) }}
       </p>
 
       <!-- Questions -->
@@ -53,7 +52,7 @@
                 class="badge badge-sm"
                 :class="answer.score > 0 ? 'badge-success' : 'badge-ghost'"
               >
-                {{ answer.score }} pts
+                {{ answer.score }} {{ $t('common.pts') }}
               </span>
               <span :class="{ 'opacity-70': answer.score === 0 }">{{ answer.text }}</span>
             </div>
@@ -76,7 +75,7 @@ const { data, isPending, error, refresh } = useQuestionnaireDetail(questionnaire
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return new Date(dateStr).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

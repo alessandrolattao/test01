@@ -1,11 +1,11 @@
 <template>
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body items-center text-center">
-      <h2 class="card-title text-2xl mb-2">Audio Presentation</h2>
+      <h2 class="card-title text-2xl mb-2">{{ $t('candidate.audio.title') }}</h2>
       <div class="text-base-content/70 mb-6 max-w-md text-left space-y-2">
-        <p>Presentati brevemente e raccontaci di un <strong>luogo turistico</strong> che hai visitato: un'attrazione, un ristorante, un hotel o qualsiasi esperienza di viaggio.</p>
-        <p>Descrivi il posto come se stessi scrivendo una recensione: cosa ti ha colpito, i punti di forza, cosa miglioreresti e se lo consiglieresti.</p>
-        <p class="text-sm text-base-content/50">Hai a disposizione massimo 2 minuti.</p>
+        <p v-html="$t('candidate.audio.instruction1')"></p>
+        <p>{{ $t('candidate.audio.instruction2') }}</p>
+        <p class="text-sm text-base-content/50">{{ $t('candidate.audio.timeLimit') }}</p>
       </div>
 
       <!-- Error -->
@@ -24,7 +24,7 @@
       <!-- Recording indicator -->
       <div v-if="recorder.isRecording.value" class="flex items-center gap-2 mb-4">
         <span class="badge badge-error animate-pulse">REC</span>
-        <span class="text-sm">Recording in progress...</span>
+        <span class="text-sm">{{ $t('candidate.audio.recording') }}</span>
       </div>
 
       <!-- Record / Stop button (before recording exists) -->
@@ -44,7 +44,7 @@
           </svg>
         </button>
         <p class="text-sm text-base-content/50">
-          {{ recorder.isRecording.value ? 'Click to stop recording' : 'Click to start recording' }}
+          {{ recorder.isRecording.value ? $t('candidate.audio.clickStop') : $t('candidate.audio.clickStart') }}
         </p>
       </template>
 
@@ -54,11 +54,11 @@
           <audio :src="recorder.audioUrl.value" controls class="w-full"></audio>
           <div class="flex gap-3">
             <button class="btn btn-ghost flex-1" :disabled="submitting" @click="recorder.reset()">
-              Record Again
+              {{ $t('candidate.audio.recordAgain') }}
             </button>
             <button class="btn btn-primary flex-1" :disabled="submitting" @click="$emit('submit')">
               <span v-if="submitting" class="loading loading-spinner loading-sm"></span>
-              {{ submitting ? 'Uploading...' : 'Submit Recording' }}
+              {{ submitting ? $t('candidate.audio.uploading') : $t('candidate.audio.submitRecording') }}
             </button>
           </div>
         </div>

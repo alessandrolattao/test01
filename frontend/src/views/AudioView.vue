@@ -20,11 +20,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import StepIndicator from '../components/candidate/StepIndicator.vue'
 import AudioRecorderComponent from '../components/candidate/AudioRecorder.vue'
 import { useAudioRecorder } from '../composables/useAudio.js'
 import { useUploadAudio } from '../composables/useCandidate.js'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const recorder = useAudioRecorder()
@@ -40,7 +42,7 @@ async function handleUpload() {
     })
     router.push({ name: 'done' })
   } catch (err) {
-    uploadError.value = err.message || 'Failed to upload audio. Please try again.'
+    uploadError.value = err.message || t('candidate.audio.uploadError')
   }
 }
 </script>

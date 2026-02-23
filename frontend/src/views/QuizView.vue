@@ -10,8 +10,8 @@
 
       <!-- Error -->
       <div v-else-if="error" class="alert alert-error">
-        <span>Could not load the quiz. Please try again.</span>
-        <button class="btn btn-sm btn-ghost" @click="refresh()">Retry</button>
+        <span>{{ $t('candidate.quiz.loadError') }}</span>
+        <button class="btn btn-sm btn-ghost" @click="refresh()">{{ $t('common.retry') }}</button>
       </div>
 
       <!-- Quiz content -->
@@ -19,8 +19,8 @@
         <!-- Progress bar -->
         <div class="mb-6">
           <div class="flex justify-between text-sm mb-1">
-            <span>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</span>
-            <span>{{ answeredCount }} answered</span>
+            <span>{{ $t('candidate.quiz.questionOf', { current: currentIndex + 1, total: totalQuestions }) }}</span>
+            <span>{{ $t('candidate.quiz.answered', { count: answeredCount }) }}</span>
           </div>
           <progress
             class="progress progress-primary w-full"
@@ -50,7 +50,7 @@
             class="btn btn-outline flex-1"
             @click="currentIndex--"
           >
-            Previous
+            {{ $t('candidate.quiz.previous') }}
           </button>
           <div v-else class="flex-1"></div>
 
@@ -60,7 +60,7 @@
             :disabled="!currentAnswered"
             @click="currentIndex++"
           >
-            Next
+            {{ $t('candidate.quiz.next') }}
           </button>
           <button
             v-else
@@ -69,7 +69,7 @@
             @click="handleSubmit"
           >
             <span v-if="submitStatus === 'loading'" class="loading loading-spinner loading-sm"></span>
-            Submit Answers
+            {{ $t('candidate.quiz.submit') }}
           </button>
         </div>
       </template>
@@ -80,11 +80,13 @@
 <script setup>
 import { reactive, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import StepIndicator from '../components/candidate/StepIndicator.vue'
 import QuestionCard from '../components/candidate/QuestionCard.vue'
 import { useActiveQuestionnaire } from '../composables/useQuestionnaire.js'
 import { useSubmitAnswers } from '../composables/useCandidate.js'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -141,7 +143,7 @@ async function handleSubmit() {
     await submitAnswers({ candidateId: route.params.candidateId, answers })
     router.push({ name: 'audio', params: { candidateId: route.params.candidateId } })
   } catch (err) {
-    submitError.value = err.message || 'Failed to submit answers. Please try again.'
+    submitError.value = err.message || t('candidate.quiz.submitError')
   }
 }
 </script>

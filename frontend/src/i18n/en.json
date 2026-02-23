@@ -1,0 +1,147 @@
+{
+  "candidate": {
+    "steps": {
+      "registration": "Registration",
+      "quiz": "Quiz",
+      "audio": "Audio"
+    },
+    "home": {
+      "title": "Join Our Team",
+      "subtitle": "Fill in your details to get started",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "firstNamePlaceholder": "John",
+      "lastNamePlaceholder": "Smith",
+      "emailPlaceholder": "john{'@'}example.com",
+      "submit": "Start Quiz",
+      "error": "Registration failed. Please try again."
+    },
+    "quiz": {
+      "loadError": "Could not load the quiz. Please try again.",
+      "questionOf": "Question {current} of {total}",
+      "answered": "{count} answered",
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Submit Answers",
+      "submitError": "Failed to submit answers. Please try again."
+    },
+    "audio": {
+      "title": "Audio Presentation",
+      "instruction1": "Briefly introduce yourself and tell us about a <strong>tourist destination</strong> you visited: an attraction, a restaurant, a hotel, or any travel experience.",
+      "instruction2": "Describe the place as if you were writing a review: what impressed you, strengths, what you would improve, and whether you would recommend it.",
+      "timeLimit": "You have a maximum of 2 minutes.",
+      "recording": "Recording in progress...",
+      "clickStart": "Click to start recording",
+      "clickStop": "Click to stop recording",
+      "recordAgain": "Record Again",
+      "submitRecording": "Submit Recording",
+      "uploading": "Uploading...",
+      "uploadError": "Failed to upload audio. Please try again."
+    },
+    "done": {
+      "title": "Thank You!",
+      "message": "Your application has been submitted successfully. We will review your profile and get back to you soon."
+    }
+  },
+  "admin": {
+    "login": {
+      "title": "Admin Login",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "admin{'@'}example.com",
+      "passwordPlaceholder": "********",
+      "submit": "Login",
+      "error": "Invalid email or password"
+    },
+    "layout": {
+      "title": "Recruitment Admin",
+      "candidates": "Candidates",
+      "questionnaires": "Questionnaires",
+      "logout": "Logout"
+    },
+    "candidates": {
+      "title": "Candidates",
+      "total": "{count} total",
+      "statTotal": "Total Candidates",
+      "statAvg": "Average Score",
+      "statCompleted": "Completed",
+      "loadError": "Failed to load candidates.",
+      "empty": "No candidates yet",
+      "colName": "Name",
+      "colEmail": "Email",
+      "colScore": "Score",
+      "colAiScore": "AI Score",
+      "colAudio": "Audio",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "failed": "Failed",
+      "incomplete": "Incomplete",
+      "noAudio": "No audio",
+      "view": "View"
+    },
+    "candidateDetail": {
+      "totalScore": "Total Score",
+      "appliedOn": "Applied on {date}",
+      "audioTitle": "Audio Presentation",
+      "noAudio": "No audio recorded",
+      "transcriptTitle": "Transcript",
+      "transcribing": "Transcription in progress...",
+      "transcriptFailed": "Transcription failed",
+      "waitingStart": "Waiting to start...",
+      "aiTitle": "AI Analysis",
+      "aiScore": "AI Score",
+      "aiAnalyzing": "AI analysis in progress...",
+      "summary": "Summary",
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "recommendation": "Recommendation",
+      "analysisFailed": "Analysis failed",
+      "waitingTranscript": "Waiting for transcription to complete...",
+      "quizAnswers": "Quiz Answers",
+      "loadError": "Failed to load candidate details.",
+      "descriptiveSkills": "Descriptive Skills",
+      "criticalThinking": "Critical Thinking",
+      "engagement": "Engagement",
+      "structure": "Structure",
+      "practicalInfo": "Practical Info"
+    },
+    "questionnaires": {
+      "title": "Questionnaires",
+      "new": "New Questionnaire",
+      "loadError": "Failed to load questionnaires.",
+      "empty": "No questionnaires yet",
+      "createFirst": "Create First Questionnaire",
+      "version": "Version {v}",
+      "active": "Active",
+      "inactive": "Inactive",
+      "questionsCount": "{count} questions - Created {date}",
+      "view": "View",
+      "detailLoadError": "Failed to load questionnaire details.",
+      "createdOn": "Created on {date} - {count} questions"
+    },
+    "questionnaireNew": {
+      "title": "New Questionnaire",
+      "question": "Question {n}",
+      "remove": "Remove",
+      "questionText": "Question Text",
+      "questionPlaceholder": "Enter your question...",
+      "answers": "Answers",
+      "answerPlaceholder": "Answer text",
+      "scorePlaceholder": "Score",
+      "addAnswer": "Add Answer",
+      "addQuestion": "Add Question",
+      "cancel": "Cancel",
+      "save": "Save Questionnaire",
+      "success": "Questionnaire created successfully",
+      "errorTextRequired": "Question text is required",
+      "errorAnswerText": "All answers must have text",
+      "errorAnswerScore": "At least one answer must have a score greater than 0",
+      "saveError": "Failed to create questionnaire."
+    }
+  },
+  "common": {
+    "retry": "Retry",
+    "pts": "pts"
+  }
+}

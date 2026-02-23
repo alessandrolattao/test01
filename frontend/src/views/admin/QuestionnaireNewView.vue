@@ -3,12 +3,12 @@
     <!-- Breadcrumb -->
     <div class="breadcrumbs text-sm mb-6">
       <ul>
-        <li><RouterLink to="/admin/questionnaires">Questionnaires</RouterLink></li>
-        <li>New Questionnaire</li>
+        <li><RouterLink to="/admin/questionnaires">{{ $t('admin.questionnaires.title') }}</RouterLink></li>
+        <li>{{ $t('admin.questionnaireNew.title') }}</li>
       </ul>
     </div>
 
-    <h1 class="text-2xl font-bold mb-6">New Questionnaire</h1>
+    <h1 class="text-2xl font-bold mb-6">{{ $t('admin.questionnaireNew.title') }}</h1>
 
     <!-- API error -->
     <div v-if="saveError" class="alert alert-error mb-4">
@@ -23,7 +23,7 @@
     >
       <div class="card-body">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-bold text-lg">Question {{ qi + 1 }}</h3>
+          <h3 class="font-bold text-lg">{{ $t('admin.questionnaireNew.question', { n: qi + 1 }) }}</h3>
           <button
             class="btn btn-ghost btn-sm text-error"
             :disabled="questions.length <= 1"
@@ -32,23 +32,23 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Remove
+            {{ $t('admin.questionnaireNew.remove') }}
           </button>
         </div>
 
         <fieldset class="fieldset mb-4">
-          <legend class="fieldset-legend">Question Text</legend>
+          <legend class="fieldset-legend">{{ $t('admin.questionnaireNew.questionText') }}</legend>
           <input
             v-model="question.text"
             type="text"
             class="input input-bordered w-full"
-            placeholder="Enter your question..."
+            :placeholder="$t('admin.questionnaireNew.questionPlaceholder')"
           />
           <p v-if="question.textError" class="text-error text-sm mt-1">{{ question.textError }}</p>
         </fieldset>
 
         <div class="space-y-2">
-          <p class="font-medium text-sm">Answers</p>
+          <p class="font-medium text-sm">{{ $t('admin.questionnaireNew.answers') }}</p>
 
           <div
             v-for="(answer, ai) in question.answers"
@@ -59,13 +59,13 @@
               v-model="answer.text"
               type="text"
               class="input input-bordered flex-1"
-              placeholder="Answer text"
+              :placeholder="$t('admin.questionnaireNew.answerPlaceholder')"
             />
             <input
               v-model.number="answer.score"
               type="number"
               class="input input-bordered w-20 text-center"
-              placeholder="Score"
+              :placeholder="$t('admin.questionnaireNew.scorePlaceholder')"
               min="0"
             />
             <button
@@ -84,7 +84,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            Add Answer
+            {{ $t('admin.questionnaireNew.addAnswer') }}
           </button>
         </div>
       </div>
@@ -95,26 +95,26 @@
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      Add Question
+      {{ $t('admin.questionnaireNew.addQuestion') }}
     </button>
 
     <!-- Save / Cancel -->
     <div class="flex justify-end gap-3 mt-6 mb-8">
-      <RouterLink to="/admin/questionnaires" class="btn btn-ghost">Cancel</RouterLink>
+      <RouterLink to="/admin/questionnaires" class="btn btn-ghost">{{ $t('admin.questionnaireNew.cancel') }}</RouterLink>
       <button
         class="btn btn-primary"
         :disabled="asyncStatus === 'loading'"
         @click="handleSave"
       >
         <span v-if="asyncStatus === 'loading'" class="loading loading-spinner loading-sm"></span>
-        Save Questionnaire
+        {{ $t('admin.questionnaireNew.save') }}
       </button>
     </div>
 
     <!-- Toast -->
     <div v-if="showToast" class="toast toast-end">
       <div class="alert alert-success">
-        <span>Questionnaire created successfully</span>
+        <span>{{ $t('admin.questionnaireNew.success') }}</span>
       </div>
     </div>
   </AdminLayout>
@@ -123,9 +123,11 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import AdminLayout from '../../components/admin/AdminLayout.vue'
 import { useCreateQuestionnaire } from '../../composables/useAdmin.js'
 
+const { t } = useI18n()
 const router = useRouter()
 const { mutateAsync, asyncStatus } = useCreateQuestionnaire()
 const saveError = ref(null)
@@ -171,20 +173,20 @@ function validate() {
     q.answersError = null
 
     if (!q.text.trim()) {
-      q.textError = 'Question text is required'
+      q.textError = t('admin.questionnaireNew.errorTextRequired')
       valid = false
     }
 
     const emptyAnswers = q.answers.some((a) => !a.text.trim())
     if (emptyAnswers) {
-      q.answersError = 'All answers must have text'
+      q.answersError = t('admin.questionnaireNew.errorAnswerText')
       valid = false
     }
 
     const hasPositiveScore = q.answers.some((a) => a.score > 0)
     if (!hasPositiveScore) {
       q.answersError = (q.answersError ? q.answersError + '. ' : '') +
-        'At least one answer must have a score greater than 0'
+        t('admin.questionnaireNew.errorAnswerScore')
       valid = false
     }
   }
@@ -214,7 +216,7 @@ async function handleSave() {
       router.push({ name: 'admin-questionnaire-detail', params: { id: result.id } })
     }, 1000)
   } catch (err) {
-    saveError.value = err.message || 'Failed to create questionnaire.'
+    saveError.value = err.message || t('admin.questionnaireNew.saveError')
   }
 }
 </script>

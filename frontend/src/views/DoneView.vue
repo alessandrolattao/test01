@@ -7,11 +7,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 class="card-title text-2xl">Thank You!</h2>
-        <p class="text-base-content/70">
-          Your application has been submitted successfully.
-          We will review your profile and get back to you soon.
-        </p>
+        <h2 class="card-title text-2xl">{{ $t('candidate.done.title') }}</h2>
+        <p class="text-base-content/70">{{ $t('candidate.done.message') }}</p>
       </div>
     </div>
   </div>

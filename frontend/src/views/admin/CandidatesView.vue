@@ -1,22 +1,22 @@
 <template>
   <AdminLayout>
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold">Candidates</h1>
-      <div v-if="data" class="badge badge-lg">{{ data.length }} total</div>
+      <h1 class="text-2xl font-bold">{{ $t('admin.candidates.title') }}</h1>
+      <div v-if="data" class="badge badge-lg">{{ $t('admin.candidates.total', { count: data.length }) }}</div>
     </div>
 
     <!-- Stats -->
     <div v-if="data && data.length > 0" class="stats shadow mb-6 w-full">
       <div class="stat">
-        <div class="stat-title">Total Candidates</div>
+        <div class="stat-title">{{ $t('admin.candidates.statTotal') }}</div>
         <div class="stat-value">{{ data.length }}</div>
       </div>
       <div class="stat">
-        <div class="stat-title">Average Score</div>
+        <div class="stat-title">{{ $t('admin.candidates.statAvg') }}</div>
         <div class="stat-value">{{ averageScore }}</div>
       </div>
       <div class="stat">
-        <div class="stat-title">Completed</div>
+        <div class="stat-title">{{ $t('admin.candidates.statCompleted') }}</div>
         <div class="stat-value">{{ completedCount }}</div>
       </div>
     </div>
@@ -28,13 +28,13 @@
 
     <!-- Error -->
     <div v-else-if="error" class="alert alert-error">
-      <span>Failed to load candidates.</span>
-      <button class="btn btn-sm btn-ghost" @click="refresh()">Retry</button>
+      <span>{{ $t('admin.candidates.loadError') }}</span>
+      <button class="btn btn-sm btn-ghost" @click="refresh()">{{ $t('common.retry') }}</button>
     </div>
 
     <!-- Empty -->
     <div v-else-if="data && data.length === 0" class="text-center py-12 text-base-content/50">
-      <p class="text-lg">No candidates yet</p>
+      <p class="text-lg">{{ $t('admin.candidates.empty') }}</p>
     </div>
 
     <!-- Table -->
@@ -43,13 +43,13 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Score</th>
-            <th>AI Score</th>
-            <th>Audio</th>
-            <th>Date</th>
-            <th>Actions</th>
+            <th>{{ $t('admin.candidates.colName') }}</th>
+            <th>{{ $t('admin.candidates.colEmail') }}</th>
+            <th>{{ $t('admin.candidates.colScore') }}</th>
+            <th>{{ $t('admin.candidates.colAiScore') }}</th>
+            <th>{{ $t('admin.candidates.colAudio') }}</th>
+            <th>{{ $t('admin.candidates.colDate') }}</th>
+            <th>{{ $t('admin.candidates.colActions') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -63,8 +63,8 @@
             <td>
               <ScoreBadge v-if="candidate.ai_score != null" :score="candidate.ai_score" :max-score="100" />
               <span v-else-if="candidate.analysis_status === 'transcribing' || candidate.analysis_status === 'analyzing'" class="loading loading-dots loading-xs"></span>
-              <span v-else-if="candidate.analysis_status === 'failed'" class="badge badge-sm badge-error">Failed</span>
-              <span v-else-if="!candidate.completed" class="badge badge-sm badge-ghost">Incomplete</span>
+              <span v-else-if="candidate.analysis_status === 'failed'" class="badge badge-sm badge-error">{{ $t('admin.candidates.failed') }}</span>
+              <span v-else-if="!candidate.completed" class="badge badge-sm badge-ghost">{{ $t('admin.candidates.incomplete') }}</span>
               <span v-else class="text-sm text-base-content/30">-</span>
             </td>
             <td>
@@ -72,7 +72,7 @@
                 v-if="candidate.audio_path"
                 :src="candidateAudioUrl(candidate.id)"
               />
-              <span v-else class="text-sm text-base-content/50">No audio</span>
+              <span v-else class="text-sm text-base-content/50">{{ $t('admin.candidates.noAudio') }}</span>
             </td>
             <td class="text-sm">{{ formatDate(candidate.created_at) }}</td>
             <td>
@@ -80,7 +80,7 @@
                 :to="{ name: 'admin-candidate-detail', params: { id: candidate.id } }"
                 class="btn btn-ghost btn-sm"
               >
-                View
+                {{ $t('admin.candidates.view') }}
               </RouterLink>
             </td>
           </tr>
@@ -133,20 +133,14 @@ const completedCount = computed(() => {
   return data.value.filter((c) => c.completed).length
 })
 
-function aiScoreBadge(score) {
-  if (score >= 70) return 'badge-success'
-  if (score >= 40) return 'badge-warning'
-  return 'badge-error'
-}
-
 function formatDate(dateStr) {
   if (!dateStr) return ''
   const d = new Date(dateStr)
-  return d.toLocaleDateString('en-US', {
+  return d.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  }) + ' ' + d.toLocaleTimeString('en-US', {
+  }) + ' ' + d.toLocaleTimeString(undefined, {
     hour: '2-digit',
     minute: '2-digit',
   })
