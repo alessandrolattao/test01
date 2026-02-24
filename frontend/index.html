@@ -1,9 +1,19 @@
 <!doctype html>
-<html lang="en" data-theme="corporate">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recruitment Platform</title>
+    <script>
+      // Sync theme with system preference before first paint
+      (function() {
+        var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'business' : 'corporate';
+        document.documentElement.setAttribute('data-theme', theme);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'business' : 'corporate');
+        });
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
